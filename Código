@@ -1,0 +1,25 @@
+:- dynamic tentativas/1.
+tentativas(3).
+
+numero_secreto(X) :- X is 42.
+
+jogo :-
+    write('Adivinhe o número entre 0 e 100: '),
+    read(Guess),
+    numero_secreto(Secret),
+    tentativas(T),
+    (   Guess == Secret
+    ->  write('Parabéns! Você acertou o número secreto!')
+    ;   T > 1
+    ->  (   Guess < Secret
+        ->  write('O número secreto é maior. ')
+        ;   write('O número secreto é menor. ')
+        ),
+        retract(tentativas(T)),
+        T1 is T - 1,
+        assert(tentativas(T1)),
+        write('Você tem '), write(T1), write(' tentativas restantes.'),
+        nl,
+        jogo
+    ;   write('Desculpe, você não tem mais tentativas. O número secreto era '), write(Secret), write('.')
+    ).
